@@ -10,14 +10,14 @@ pyserial==3.5
 # Environment variable management
 python-dotenv==1.0.0
 
+# Configuration file management (required by config_loader.py)
+pyyaml==6.0.1
+
 # Optional: For advanced motor control and calculations
 numpy==1.24.3
 
 # Optional: For plotting motor movements and data visualization
 matplotlib==3.7.1
-
-# Optional: For configuration file management
-pyyaml==6.0.1
 
 # Optional: For logging and debugging
 colorlog==6.7.0
