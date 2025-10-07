@@ -1,0 +1,31 @@
+[Unit]
+Description=Open Ground Station Rotator Controller (OGRC)
+Documentation=https://github.com/your-repo/stepper_rasp
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/home/pi/stepper_rasp
+ExecStart=/usr/bin/python3 /home/pi/stepper_rasp/main.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Environment variables
+Environment=PYTHONPATH=/home/pi/stepper_rasp
+Environment=PYTHONUNBUFFERED=1
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Resource limits
+LimitNOFILE=1024
+MemoryMax=512M
+
+[Install]
+WantedBy=multi-user.target

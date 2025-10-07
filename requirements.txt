@@ -1,8 +1,11 @@
-# Raspberry Pi Stepper Motor Control Dependencies
-# For TB6600 driver and GPIO control
+# Open Ground Station Rotator Controller Dependencies
+# For dual-axis stepper motor control with IMU feedback
 
 # GPIO control for Raspberry Pi
 RPi.GPIO==0.7.1
+
+# Serial communication for IMU (WT901C-RS485)
+pyserial==3.5
 
 # Environment variable management
 python-dotenv==1.0.0
