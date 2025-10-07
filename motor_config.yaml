@@ -1,0 +1,107 @@
+# Stepper Motor Configuration File
+# This file contains advanced settings for motor control and TB6600 driver configuration
+
+# Motor Specifications
+motor:
+  # Standard stepper motor parameters
+  steps_per_revolution: 200      # Typical for 1.8° step angle motors
+  step_angle: 1.8               # Degrees per step
+  max_rpm: 300                  # Maximum safe RPM for your motor
+  rated_voltage: 12             # Motor rated voltage (V)
+  rated_current: 1.5            # Motor rated current (A)
+  
+  # Physical characteristics
+  holding_torque: 0.4           # Holding torque in Nm
+  detent_torque: 0.02           # Detent torque in Nm
+  rotor_inertia: 54             # Rotor inertia in g·cm²
+
+# TB6600 Driver Configuration
+driver:
+  # Microstep settings (must match DIP switch configuration)
+  microstep_multiplier: 1       # 1, 2, 4, 8, or 16
+  
+  # Current settings (percentage of max current)
+  current_setting: 70           # 50%, 70%, or 100% (DIP switches SW4-SW6)
+  
+  # Driver specifications
+  max_output_current: 4.0       # Maximum driver output current (A)
+  input_voltage_range:
+    min: 9                      # Minimum input voltage (V)
+    max: 40                     # Maximum input voltage (V)
+  
+  # Enable/disable settings
+  enable_active_low: true       # TB6600 enable is active low
+
+# Speed and Acceleration Profiles
+motion:
+  # Default speed settings (steps per second)
+  default_speed: 100
+  min_speed: 1
+  max_speed: 1000
+  
+  # Acceleration profiles (for future implementation)
+  acceleration:
+    enable: false               # Enable acceleration/deceleration
+    ramp_up_time: 1.0          # Time to reach max speed (seconds)
+    ramp_down_time: 1.0        # Time to decelerate (seconds)
+  
+  # Homing settings
+  homing:
+    speed: 50                   # Homing speed (steps/sec)
+    timeout: 30                 # Homing timeout (seconds)
+    use_limit_switch: false     # Use limit switch for homing
+
+# Safety Settings
+safety:
+  # Timeout settings
+  operation_timeout: 300        # Maximum operation time (seconds)
+  continuous_rotation_timeout: 60  # Max continuous rotation time (seconds)
+  
+  # Emergency stop
+  emergency_stop_enabled: true
+  
+  # Position limits (if using encoders or limit switches)
+  position_limits:
+    enable: false
+    min_position: -1000         # Minimum position (steps)
+    max_position: 1000          # Maximum position (steps)
+
+# GPIO Pin Configuration (overrides .env file if specified)
+gpio:
+  # Leave empty to use .env file settings
+  # dir_pin: 23
+  # step_pin: 24
+  # enable_pin: 25
+  
+  # Additional pins for future features
+  limit_switch_pin: null        # Limit switch input pin
+  encoder_a_pin: null           # Encoder A phase pin
+  encoder_b_pin: null           # Encoder B phase pin
+
+# Logging Configuration
+logging:
+  level: "INFO"                 # DEBUG, INFO, WARNING, ERROR
+  log_to_file: false
+  log_file_path: "stepper_motor.log"
+  log_motor_movements: true
+  log_position_changes: true
+
+# Advanced Features (for future implementation)
+advanced:
+  # Closed-loop control
+  closed_loop:
+    enable: false
+    encoder_resolution: 1000    # Encoder pulses per revolution
+    position_tolerance: 2       # Acceptable position error (steps)
+  
+  # Vibration reduction
+  vibration_reduction:
+    enable: false
+    microstepping_interpolation: true
+    current_reduction_idle: 50  # Reduce current when idle (%)
+  
+  # Temperature monitoring
+  temperature_monitoring:
+    enable: false
+    max_temperature: 80         # Maximum safe temperature (°C)
+    temperature_pin: null       # ADC pin for temperature sensor
