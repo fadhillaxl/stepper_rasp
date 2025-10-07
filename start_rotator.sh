@@ -16,10 +16,11 @@ fi
 
 # Check if Python dependencies are installed
 echo "Checking dependencies..."
-python3 -c "import RPi.GPIO, serial, dotenv" 2>/dev/null
+python3 -c "import RPi.GPIO, serial, dotenv, yaml" 2>/dev/null
 if [ $? -ne 0 ]; then
     echo "Error: Missing Python dependencies"
-    echo "Please install: pip3 install RPi.GPIO pyserial python-dotenv"
+    echo "Please install system-wide: sudo pip3 install RPi.GPIO pyserial python-dotenv pyyaml"
+    echo "Note: sudo is required because this script runs with root privileges for GPIO access"
     exit 1
 fi
 
