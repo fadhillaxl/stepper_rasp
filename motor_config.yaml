@@ -1,5 +1,27 @@
 # Stepper Motor Configuration File
 # This file contains advanced settings for motor control and TB6600 driver configuration
+#
+# TB6600 Stepper Driver Wiring Guide:
+# ===================================
+# Power Connections:
+#   VCC: 9-40V DC power supply (24V recommended)
+#   GND: Power supply ground
+#
+# Motor Connections (to NEMA 17 stepper):
+#   A+, A-: Coil A (typically Red/Blue wires)
+#   B+, B-: Coil B (typically Green/Black wires)
+#
+# Control Connections (to Raspberry Pi):
+#   PUL+: Step signal (connect to GPIO step pin via 220Ω resistor)
+#   PUL-: Step ground (connect to Pi GND)
+#   DIR+: Direction signal (connect to GPIO dir pin via 220Ω resistor)  
+#   DIR-: Direction ground (connect to Pi GND)
+#   ENA+: Enable signal (connect to GPIO enable pin via 220Ω resistor)
+#   ENA-: Enable ground (connect to Pi GND)
+#
+# DIP Switch Settings (refer to TB6600 manual):
+#   SW1-SW3: Microstep resolution
+#   SW4-SW6: Current setting (match to motor specifications)
 
 # Motor Specifications
 motor:
@@ -17,27 +39,38 @@ motor:
 
 # TB6600 Driver Configuration
 driver:
-  # Microstep settings (must match DIP switch configuration)
-  microstep_multiplier: 1       # 1, 2, 4, 8, or 16
+  # Microstep settings (must match DIP switch configuration on TB6600)
+  # SW1-SW3 DIP switches: 1=OFF, 2=OFF, 3=OFF for 1/1 (full step)
+  # SW1-SW3 DIP switches: 1=ON,  2=OFF, 3=OFF for 1/2 (half step)  
+  # SW1-SW3 DIP switches: 1=OFF, 2=ON,  3=OFF for 1/4 (quarter step)
+  # SW1-SW3 DIP switches: 1=ON,  2=ON,  3=OFF for 1/8 (eighth step)
+  # SW1-SW3 DIP switches: 1=ON,  2=ON,  3=ON  for 1/16 (sixteenth step)
+  microstep_multiplier: 8       # Recommended: 8 for smooth operation
   
-  # Current settings (percentage of max current)
+  # Current settings (must match DIP switch configuration on TB6600)
+  # SW4-SW6 DIP switches control current: 50%, 70%, or 100%
+  # For NEMA 17 motors (1.5A typical), use 70% setting
   current_setting: 70           # 50%, 70%, or 100% (DIP switches SW4-SW6)
   
-  # Driver specifications
+  # TB6600 Driver specifications
   max_output_current: 4.0       # Maximum driver output current (A)
   input_voltage_range:
-    min: 9                      # Minimum input voltage (V)
+    min: 9                      # Minimum input voltage (V) 
     max: 40                     # Maximum input voltage (V)
+    recommended: 24             # Recommended voltage for optimal performance
   
-  # Enable/disable settings
-  enable_active_low: true       # TB6600 enable is active low
+  # Control signal specifications
+  enable_active_low: true       # TB6600 enable is active low (ENA-)
+  pulse_width_min: 2.5          # Minimum pulse width (microseconds)
+  direction_setup_time: 5       # Direction setup time (microseconds)
 
 # Speed and Acceleration Profiles
 motion:
   # Default speed settings (steps per second)
-  default_speed: 100
-  min_speed: 1
-  max_speed: 1000
+  # Note: With 8x microstepping, these are microsteps per second
+  default_speed: 400            # Good balance of speed and smoothness
+  min_speed: 10                 # Minimum reliable speed for TB6600
+  max_speed: 2000               # Maximum speed with 8x microstepping
   
   # Acceleration profiles (for future implementation)
   acceleration:
